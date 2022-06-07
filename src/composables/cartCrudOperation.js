@@ -15,10 +15,7 @@ function cartCrudOperation() {
   const cartDrawerItems = ref([]);
 
   const selected = (cart) => {
-    updateCartSelected(
-      cart.id,
-      JSON.stringify({ selected: !cart.selected })
-    ).then(() => {
+    updateCartSelected(cart.id, { selected: !cart.selected }).then(() => {
       cart.selected = !cart.selected;
       cartDrawerItems.value = cartItems.value.filter((cartItem) => {
         return cartItem.selected;

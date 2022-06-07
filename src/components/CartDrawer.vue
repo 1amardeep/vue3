@@ -44,7 +44,7 @@ export default defineComponent({
   width: 20%;
   background-color: blueviolet;
   position: fixed;
-  top: 78px;
+  top: 60px;
   right: 0px;
   animation: openDrawer 0.3s ease-in-out;
 }

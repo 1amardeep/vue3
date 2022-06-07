@@ -12,7 +12,9 @@
     >
     <div>
       <div v-if="isLoggedIn">
-        <div class="displayName">Welcome !! {{ user?.displayName }}</div>
+        <div class="displayName">
+          <span class="hide"> Welcome !!</span> {{ user?.displayName }}
+        </div>
         <a class="loglogin" @click="logoutFn">Logout</a>
       </div>
       <router-link v-else class="signUp" to="/signup">Sign Up</router-link>
@@ -112,5 +114,11 @@ nav a.router-link-exact-active {
   color: white;
   right: 20px;
   top: 24px;
+}
+
+@media screen and (max-width: 600px) {
+  .hide {
+    display: none;
+  }
 }
 </style>

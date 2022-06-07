@@ -57,11 +57,20 @@ export default function cartAPI() {
   };
 
   const updateCartSelected = async (id, body) => {
-    return fetch("http://localhost:3000/cartItems/" + id, {
-      method: "PATCH",
-      headers: { "content-type": "application/json" },
-      body,
-    });
+    try {
+      const res = await projectFirestore
+        .collection("cartItems")
+        .doc(id)
+        .update(body);
+      console.log(res);
+    } catch (err) {
+      console.log(err);
+    }
+    // return fetch("http://localhost:3000/cartItems/" + id, {
+    //   method: "PATCH",
+    //   headers: { "content-type": "application/json" },
+    //   JSON.stringify(body),
+    // });
   };
 
   return {
