@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import useSignUp from "@/composables/authAPI";
+import useSignUp from "@/composables/SignUpAPI";
 import { ref } from "vue";
 
 export default {
