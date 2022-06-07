@@ -6,8 +6,10 @@
       src="assets/company_logo.png"
       @click="home"
     />
-    <router-link :to="{ name: 'home' }">Home</router-link>
-    <router-link :to="{ name: 'cartitems' }">Cart Items</router-link>
+    <router-link v-if="isLoggedIn" :to="{ name: 'home' }">Home</router-link>
+    <router-link v-if="isLoggedIn" :to="{ name: 'cartitems' }"
+      >Cart Items</router-link
+    >
     <div>
       <div v-if="isLoggedIn">
         <div class="displayName">Welcome !! {{ user?.displayName }}</div>
@@ -59,12 +61,13 @@ export default {
 
 <style scoped>
 nav {
-  padding: 30px 0px;
+  padding: 30px 0px 17px 0px;
   background: black;
   position: sticky;
   width: 100%;
   z-index: 1;
   top: 0px;
+  height: 20px;
 }
 
 nav a {
@@ -85,7 +88,7 @@ nav a.router-link-exact-active {
   height: 50px;
   border-radius: 50%;
   position: absolute;
-  top: 17px;
+  top: 10px;
   left: 15px;
   transform: rotate(180deg);
 }
@@ -99,7 +102,7 @@ nav a.router-link-exact-active {
 
 .signUp {
   position: absolute;
-  top: 20px;
+  top: 15px;
   right: 17px;
   cursor: pointer;
 }

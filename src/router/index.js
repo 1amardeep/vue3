@@ -1,15 +1,27 @@
+/* eslint-disable */
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import SignUpView from "../views/SignUpView.vue";
 import CartView from "../views/CartView.vue";
 import CartDetailsView from "../views/CartDetailsView.vue";
 import PageNotFoundView from "../views/PageNotFoundView.vue";
+import { projectAuth } from "../firebase/config";
 
-const routes: Array<RouteRecordRaw> = [
+const requireUser = (_to, _from, next) => {
+  const user = projectAuth.currentUser;
+  if (!user) {
+    next({ name: "SignUpView" });
+  } else {
+    next();
+  }
+};
+
+const routes = [
   {
     path: "/home",
     name: "home",
     component: HomeView,
+    beforeEnter: requireUser,
   },
   {
     path: "/signup",
@@ -20,11 +32,13 @@ const routes: Array<RouteRecordRaw> = [
     path: "/cartitems",
     name: "cartitems",
     component: CartView,
+    beforeEnter: requireUser,
   },
   {
     path: "/cartitems/:id",
     name: "cartitemDetails",
     component: CartDetailsView,
+    beforeEnter: requireUser,
   },
   {
     path: "/addcartview",
