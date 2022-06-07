@@ -1,0 +1,11 @@
+{
+  "cartItems": [
+    {
+      "name": "Skirt",
+      "id": 5,
+      "url": "./assets/Skirt.jpg",
+      "selected": false,
+      "price": 3500
+    }
+  ]
+}
