@@ -35,8 +35,6 @@ export default {
     const formSubmit = async () => {
       const res = await signUp(email.value, password.value, name.value);
       if (res) {
-        console.log(res);
-        console.log(res.user.displayName);
         context.emit("home");
       }
     };

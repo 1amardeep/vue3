@@ -43,11 +43,9 @@ export default {
       router.push({ name: "home" });
     };
     const logoutFn = async () => {
-      console.log("hti");
       await logout();
       if (!error.value) {
         router.push({ name: "SignUpView" });
-        console.log("logout sucessfull");
       }
     };
     return {
