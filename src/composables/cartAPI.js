@@ -1,12 +1,11 @@
 import { projectFirestore, timeStamp } from "../firebase/config";
 import { ref } from "vue";
+const showSpinner = ref(false);
 
 export default function cartAPI() {
-  const showSpinner = ref(false);
-
   const getCart = async () => {
-    showSpinner.value = true;
     try {
+      showSpinner.value = true;
       const res = await projectFirestore
         .collection("cartItems")
         .orderBy("createdAt")

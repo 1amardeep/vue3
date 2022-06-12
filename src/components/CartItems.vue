@@ -1,43 +1,54 @@
 <template>
   <div class="card">
-    <div class="card_item" v-for="cart in cartItems" :key="cart.id">
+    <div class="card_item" v-for="cart in cartItemsClone" :key="cart.id">
       <img :src="cart.url" :alt="cart.name" height="150" />
       <p>{{ cart.name }}</p>
       <p>&#8377;{{ cart.price }}</p>
       <p>{{ cart.tag }}</p>
-      <button
-        class="btn"
-        :class="{ selected: cart.selected }"
-        @click="selected(cart)"
-      >
-        <span class="material-icons"> shopping_cart </span>
-      </button>
-      <button class="btn" @click="edit(cart.id)">
+      <div style="position: relative">
+        <button
+          v-if="cart.count === 0"
+          class="btn add_to_cart"
+          @click="addItemToCart(cart)"
+        >
+          Add to Cart
+        </button>
+        <button v-else class="btn add_to_cart d_flex d_flex_spacearound">
+          <div class="incDecCart" @click="removeItemFromCart(cart)">-</div>
+          <div>{{ cart.count }}</div>
+          <div class="incDecCart" @click="addItemToCart(cart)">+</div>
+        </button>
+      </div>
+      <!-- <button class="btn" @click="edit(cart.id)">
         <span class="material-icons"> edit </span>
-      </button>
+      </button> -->
     </div>
   </div>
-  <CartDrawer :cartDrawerItems="cartDrawerItems" v-if="selectedItemToCart" />
+  <!-- <CartDrawer :cartDrawerItems="cartDrawerItems" v-if="selectedItemToCart" /> -->
   <SpinnerLoader v-if="showSpinner" />
 </template>
 
 <script>
-import CartDrawer from "@/components/CartDrawer.vue";
+// import CartDrawer from "@/components/CartDrawer.vue";
 import SpinnerLoader from "@/components/SpinnerLoader.vue";
 import { computed, onMounted } from "vue";
+import { storeToRefs } from "pinia";
 import cartCrudOperation from "@/composables/cartCrudOperation";
 import { useRouter } from "vue-router";
+import { cartStore } from "@/storage/cartStorage";
 
 export default {
   name: "CartItems",
   components: {
-    CartDrawer,
+    // CartDrawer,
     SpinnerLoader,
   },
   setup() {
-    const { showSpinner, cartItems, getCartData, selected, cartDrawerItems } =
-      cartCrudOperation();
+    const { selected, cartDrawerItems } = cartCrudOperation();
     const router = useRouter();
+    const cartStorage = cartStore();
+    const { cartItems, showSpinner, cartItemsClone } = storeToRefs(cartStorage);
+    const { getCartData, addItemToCart, removeItemFromCart } = cartStorage;
 
     const selectedItemToCart = computed(() => {
       if (cartItems.value.length > 0) {
@@ -51,8 +62,7 @@ export default {
     });
 
     onMounted(async () => {
-      showSpinner.value = true;
-      getCartData();
+      if (!cartItemsClone.value.length) await getCartData();
     });
 
     const edit = function (id) {
@@ -66,6 +76,9 @@ export default {
       selectedItemToCart,
       selected,
       edit,
+      addItemToCart,
+      removeItemFromCart,
+      cartItemsClone,
     };
   },
 };
@@ -74,10 +87,8 @@ export default {
 <style scoped>
 .card {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   flex-wrap: wrap;
-  margin-left: 10%;
-  width: 75%;
 }
 
 .card_item:hover {
@@ -93,5 +104,29 @@ export default {
 .selected {
   background: #747ad1;
   color: white;
+}
+
+.add_to_cart {
+  width: 100%;
+  font-size: 15px;
+  padding: 12px;
+  margin-top: 0px;
+}
+
+.d_flex_spacearound {
+  justify-content: space-around;
+  box-sizing: border-box;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+}
+
+.incDecCart {
+  padding: 3px 24px;
+  border-radius: 16px;
+  background: white;
+  color: #583d3d;
+  font-size: 16px;
+  font-weight: 800;
 }
 </style>

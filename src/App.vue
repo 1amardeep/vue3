@@ -1,23 +1,31 @@
 <template>
   <nav class="nav_bar">
-    <img
-      class="company_logo"
-      alt="company logo"
-      src="assets/company_logo.png"
-      @click="home"
-    />
-    <router-link v-if="isLoggedIn" :to="{ name: 'home' }">Home</router-link>
-    <router-link v-if="isLoggedIn" :to="{ name: 'cartitems' }"
-      >Cart Items</router-link
-    >
-    <div>
-      <div v-if="isLoggedIn">
-        <div class="displayName">
-          <span class="hide"> Welcome !!</span> {{ user?.displayName }}
-        </div>
-        <a class="loglogin" @click="logoutFn">Logout</a>
+    <div class="nav_bar_menu">
+      <div class="nav_bar_menu_column1">
+        <img
+          class="company_logo"
+          alt="company logo"
+          src="assets/company_logo.png"
+          @click="home"
+        />
+        <router-link v-if="isLoggedIn" :to="{ name: 'home' }">Home</router-link>
+        <router-link v-if="isLoggedIn" :to="{ name: 'cartitems' }"
+          >Cart Items</router-link
+        >
       </div>
-      <router-link v-else class="signUp" to="/signup">Sign Up</router-link>
+      <div class="nav_bar_menu_column2">
+        <div v-if="isLoggedIn">
+          <button class="btn shopping_cart_btn">
+            <span class="material-icons"> shopping_cart </span>
+            <span> {{ itemInCart.length }} </span>
+          </button>
+          <div class="displayName">
+            <span class="hide"> Welcome !!</span> {{ user?.displayName }}
+          </div>
+          <a class="loglogin" @click="logoutFn">Logout</a>
+        </div>
+        <router-link v-else class="signUp" to="/signup">Sign Up</router-link>
+      </div>
     </div>
   </nav>
   <router-view />
@@ -28,12 +36,16 @@ import { useRouter } from "vue-router";
 import useLogout from "@/composables/logoutAPI";
 import getUser from "@/composables/getUser";
 import { computed } from "vue";
+import { cartStore } from "@/storage/cartStorage";
+import { storeToRefs } from "pinia";
 
 export default {
   setup() {
     const router = useRouter();
     const { error, logout } = useLogout();
     const { user } = getUser();
+    const cartStorage = cartStore();
+    const { itemInCart } = storeToRefs(cartStorage);
 
     const isLoggedIn = computed(() => {
       return !!user.value;
@@ -54,6 +66,7 @@ export default {
       error,
       isLoggedIn,
       user,
+      itemInCart,
     };
   },
 };
@@ -68,6 +81,22 @@ nav {
   z-index: 1;
   top: 0px;
   height: 20px;
+}
+
+.nav_bar_menu {
+  display: grid;
+  grid-template-columns: auto auto auto;
+}
+
+.nav_bar_menu_column1 {
+  grid-column-start: 1;
+  grid-column-end: 3;
+}
+
+.shopping_cart_btn {
+  margin-top: -9px;
+  padding: 7px;
+  border-radius: 10px;
 }
 
 nav a {

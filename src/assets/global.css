@@ -67,3 +67,7 @@ form {
     font-size: 14px;
     color: rgb(226, 42, 42);
   }
+
+  .d_flex {
+    display: flex;
+  }
